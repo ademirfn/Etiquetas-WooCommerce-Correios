@@ -2,8 +2,7 @@
 /*
   Plugin Name: Gerador de Etiquetas WooCommerce
   Plugin URI: http://www.fernandoacosta.net
-  Description: Um plugin simples para impressão de etiquetas do WooCommerce para envio por Correios. 
-  Inspirado em elodigital
+  Description: Um plugin simples para impressão de etiquetas do WooCommerce para envio por Correios.
   Version: 0.2
   Author: Fernando Acosta
   Author URI: http://fernandoacosta.net
@@ -35,8 +34,6 @@
 		$wp_list_table = _get_list_table( 'WP_Posts_List_Table' );
 		$action = $wp_list_table->current_action();
 
-		print_r($action);
-
 		// Bail out if this is not a status-changing action
 		if ( strpos( $action, 'gerar_' ) === false ) {
 			return;
@@ -67,7 +64,7 @@ function bulk_action_etiqueta_notices() {
 			if ( isset( $_REQUEST[ 'gerada_etiqueta' ] ) ) {
 
 				$number = isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0;
-				$message = 'Etiquetas geradas em uma nova aba';
+				$message = 'Etiquetas geradas em uma nova aba. Se não abrir, <a href="'. get_admin_url() .'admin-ajax.php/?action=get_etiquetas_pdf&ids='.$_GET['ids'].'" target="_blank">clique aqui</a>.';
 				echo '<div class="updated"><p>' . $message . '</p></div>';
 			}
 	}
