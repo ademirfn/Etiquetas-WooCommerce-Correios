@@ -16,9 +16,6 @@ Um plugin funcional. Apenas isso. Gere etiquetas para Correios a partir dos pedi
 
 Instale normalmente como qualquer plugin WordPress.
 
-1. Upload \`plugin-name.php\` to the \`/wp-content/plugins/\` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place \`<?php do_action('plugin_name_hook'); ?>\` in your templates
 
 == Frequently Asked Questions ==
 
