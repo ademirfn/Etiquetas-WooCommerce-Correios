@@ -97,13 +97,14 @@ $html .= ' </head>';
 $html .= ' <body>';
 $html .= ' <page>';
 
-$arrei = $_GET['ids'];
-$arrei = explode(",", $arrei);
+$orders = $_GET['ids'];
+$orders = explode(",", $orders);
 
 $i=0; $a=0;
-foreach ($arrei as $key => $value) {
+foreach ($orders as $key => $value) {
 
 	$pedido = $value;
+	$order = new WC_Order( $pedido );
 	$order = wc_get_order( $value );
 
 	//altura
@@ -113,13 +114,13 @@ foreach ($arrei as $key => $value) {
 	//esquerda//direita
 	if($i%2){ $alinha = "right"; $a++; }else{ $alinha = "left";  }
 
-	$nome 			= get_post_meta($pedido, '_billing_first_name', TRUE);
-	$sobrenome 		= get_post_meta($pedido, '_billing_last_name', TRUE);
-	$endereco 		= get_post_meta($pedido, '_billing_address_1', TRUE);
-	$endereco2 		= get_post_meta($pedido, '_billing_address_2', TRUE);
-	$cidade 		= get_post_meta($pedido, '_billing_city', TRUE);
-	$uf 			= get_post_meta($pedido, '_billing_state', TRUE);
-	$cep 			= get_post_meta($pedido, '_billing_postcode', TRUE);
+	$nome 			= $order->shipping_first_name;
+	$sobrenome 		= $order->shipping_last_name;
+	$endereco 		= $order->shipping_address_1;
+	$endereco2 		= $order->shipping_address_2;
+	$cidade 		= $order->shipping_city;
+	$uf 			= $order->shipping_state;
+	$cep 			= $order->shipping_postcode;
 
 $rates = $order->get_shipping_methods();
 foreach ( $rates as $key => $rate ) {
@@ -135,7 +136,7 @@ $html .= ';height:';
 $html .= $height;
 $html .= 'px;"><div>';
 $html .= '#000';
-$html .= $pedido;
+$html .= $order->id;
 $html .= ' - <b>';
 
 if ( $tipoEnvio == 'free_shipping' ) {
@@ -151,8 +152,8 @@ $html .= ' - ';
 
 
 if ( is_plugin_active( 'woocommerce-extra-checkout-fields-for-brazil/woocommerce-extra-checkout-fields-for-brazil.php' ) ) {
-	$numero 			= get_post_meta($pedido, '_billing_number', TRUE);
-	$bairro 			= get_post_meta($pedido, '_billing_neighborhood', TRUE);
+	$numero 			= $order->shipping_number;
+	$bairro 			= $order->shipping_neighborhood;
   	$html .= $numero;
   	$html .= '<br/>';
   	$html .= $bairro;
