@@ -1,5 +1,5 @@
 === Gerador de Etiquetas WooCommerce ===
-Contributors: fernandoacosta
+Contributors: fernandoacosta, paico (github.com/paico)
 Donate link: http://fernandoacosta.net
 Tags: woocommerce, print
 Requires at least: 3.8

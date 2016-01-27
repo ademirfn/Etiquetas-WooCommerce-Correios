@@ -42,6 +42,7 @@ body {
 	margin-top: 57px !important;
 	margin-left: 17.7px !important;
 	margin-right: 17.7px !important;
+	font-family: helvetica !important;
 }
 
 @page .single-page {
@@ -92,20 +93,20 @@ foreach ( $rates as $key => $rate ) {
 $html .= '<div class="one ';
 $html .= $alinha;
 $html .= '" style="top: ' . $top . 'px;"><div>';
-$html .= '#';
-$html .= str_pad($order->id, 6, "0", STR_PAD_LEFT);
-$html .= ' - <b>';
+#$html .= '#';
+#$html .= str_pad($order->id, 6, "0", STR_PAD_LEFT);
+$html .= '<b>DESTINAT&Aacute;RIO: </b>';
 
 if ( $tipoEnvio == 'advanced_free_shipping' ) {
-	$html .= 'Carta Registrada';
+	#$html .= 'Carta Registrada';
 } else {
-	$html .= $tipoEnvio;
+	#$html .= $tipoEnvio;
 }
-$html .= '</b><br /><b>';
+$html .= '</b><br /><p style="font-size: 10px;">';
 $html .= $nome ." ". $sobrenome;
-$html .= '</b><br />';
+$html .= '<br />';
 $html .= $endereco;
-$html .= ' - ';
+#$html .= ' - ';
 
 
 	// campos do Extra Checkout Field
@@ -113,20 +114,50 @@ $html .= ' - ';
 	$bairro = $order->shipping_neighborhood;
   	$html .= $numero;
   	$html .= '<br/>';
-  	$html .= $bairro;
-  	$html .= ' - ';
+	/**
+	  * verifica se o campo foi preenchido, evitando que fique espaços em branco na etiqueta
+	  */
+	if($bairro != ""){
+	  	$html .= $bairro;
+		$html .= '<br />';
+	}
+#  	$html .= ' - ';
 	// fim dos campos do Extra Checkout Field
-
-
-$html .= $endereco2;
-$html .= '<br />';
+/**
+  * verifica se o campo foi preenchido, evitando que fique espaços em branco na etiqueta
+  */
+if($endereco2 != ""){
+	$html .= $endereco2;
+	$html .= '<br />';
+}
 $html .= $cidade;
 $html .= ' - ';
 $html .= $uf;
-$html .= '<br /><b>';
+$html .= '<br />';
 $html .= 'CEP: ';
 $html .= $cep;
-$html .= '</b></div></div>';
+$html .= '<br />';
+$html .= '<br />';
+
+/**
+  * Verifica se o post tipo página responsável pelo endereço do remente já foi inserido no banco
+  * Se foi, exibe o remetente, se não, insere um remetente padrão e exibe
+  * O remetente padrão deve ser alterado no painel, nas páginas
+  */
+$buscaRemetente = mysql_query("SELECT SQL_CACHE * FROM wp_posts WHERE post_password = '123Mudar#$'") or die(mysql_error());
+if(mysql_num_rows($buscaRemetente) == 0){
+	$insere = mysql_query("INSERT INTO wp_posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status,  comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, menu_order, post_type, post_mime_type, comment_count) VALUES ('1', '2016-01-27 12:45:09', '2016-01-27 14:45:09', 'Nome da empresa<br>R. Nome da rua, 123 - Centro<br>Cidade - UF<br>CEP: 99888-777', 'Nosso endereço', '', 'publish', 'closed', 'closed', '123Mudar#$', 'nosso-endereco', '', '', '2016-01-27 14:53:51', '2016-01-27 14:53:51', '', '0', 'http://localhost/wordpress/?page_id=', '0', 'page', '', '0')") or die(mysql_error());
+	$buscaDeNovo = mysql_query("SELECT * FROM wp_posts WHERE post_password = '123Mudar#$'") or die(mysql_error());
+	$r = mysql_fetch_array($buscaDeNovo);
+	$html .= '<b>REMETENTE</b><br>';
+	$html .= '<p style="font-size: 10px;">'.$r['post_content'].'</p>';
+}else{
+	$r = mysql_fetch_array($buscaRemetente);
+	$html .= '<b>REMETENTE</b><br>';
+	$html .= '<p style="font-size: 10px;">'.$r['post_content'].'</p>';
+}
+
+$html .= '</p></div></div>';
 
 if( $i == 13 ){
 	$html .= '</div></page><page><div class="single-page">';
@@ -136,8 +167,6 @@ if( $i == 13 ){
 $i++;
 	
 }
-
-
  
 $html .= ' </body>';
 $html .= '</html>';

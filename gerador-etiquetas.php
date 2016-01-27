@@ -8,6 +8,9 @@
   Author URI: http://fernandoacosta.net
   License: GPL v3
 
+  Author: Tiago Floriano (pequenas alterações no layout de impressão e inserção de remetente)
+  Author URI: http://github.com/paico
+
 	Plugin Simples.
 */
 if ( ! defined( 'ABSPATH' ) ) {
